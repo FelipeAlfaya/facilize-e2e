@@ -1,14 +1,33 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: facilize_user
+      POSTGRES_PASSWORD: facilize_password
+      POSTGRES_DB: facilize_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
   api:
     build: ./api
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=postgres://facilize_user:facilize_password@db:5432/facilize_db
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - app-network
+    command: sh -c "npm run prisma:migrate-deploy && npm run start:prod"
 
   frontend:
     build: ./frontend
@@ -18,7 +37,11 @@ services:
       - api
     networks:
       - app-network
+    
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
