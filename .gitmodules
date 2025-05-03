@@ -1,0 +1,6 @@
+[submodule "api/BE-Facilize"]
+	path = api/BE-Facilize
+	url = https://github.com/FelipeAlfaya/BE-FACILIZE-3.git
+[submodule "frontend/FE-Facilize"]
+	path = frontend/FE-Facilize
+	url = https://github.com/FelipeAlfaya/FE-FACILIZE2.git
